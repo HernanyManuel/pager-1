@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:myapp/core/app_theme.dart';
 import 'package:myapp/providers/analytics_provider.dart';
+import 'package:myapp/providers/one_to_one_chat_provider.dart';
 import 'package:myapp/services/battery_level_history/battery_level.dart';
 import 'package:myapp/services/user_service.dart';
 import 'package:provider/provider.dart';
@@ -82,6 +83,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         // Providers de Estado da UI
         ChangeNotifierProvider<ThemeProvider>(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider<OneToOneChatProvider>(
+          create: (_) => OneToOneChatProvider(),
+        ),
         ChangeNotifierProvider<SettingsProvider>(
           create: (_) => SettingsProvider(),
         ),

@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/screens/faq/all_faq_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class FaqScreen extends StatelessWidget {
@@ -34,9 +35,18 @@ class FaqScreen extends StatelessWidget {
             answer: 'groupsManagementAnswer'.tr(),
           ),
           const SizedBox(height: 20),
+          // ElevatedButton(
+          //   onPressed: () {
+          //     _launchURL(context);
+          //   },
+          //   child: Text('viewManual'.tr()),
+          // ),
           ElevatedButton(
             onPressed: () {
-              _launchURL(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ManualScreen()),
+              );
             },
             child: Text('viewManual'.tr()),
           ),

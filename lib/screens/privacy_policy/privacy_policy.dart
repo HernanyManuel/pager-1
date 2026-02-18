@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PrivacyPolicyScreen extends StatefulWidget {
   const PrivacyPolicyScreen({super.key});
@@ -9,6 +10,18 @@ class PrivacyPolicyScreen extends StatefulWidget {
 
 class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
   bool isAccepted = false;
+  @override
+  void initState() {
+    super.initState();
+    _loadPrivacyStatus();
+  }
+
+  Future<void> _loadPrivacyStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isAccepted = prefs.getBool('privacyAccepted') ?? false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +36,6 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
               child: SingleChildScrollView(
                 child: const Text('''
 Your Privacy Policy text here...
-
 1. We collect basic account information.
 2. We do not sell user data.
 3. Messages are stored securely.
@@ -34,9 +46,7 @@ By using this app, you agree to this Privacy Policy.
               ),
             ),
           ),
-
-          const Divider(height: 1),
-
+          Divider(height: 1),
           // ✅ Checkbox + Agree Button
           Padding(
             padding: const EdgeInsets.all(12),

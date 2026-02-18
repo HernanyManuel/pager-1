@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:myapp/screens/one_to_one_chat/one_to_one_chat_screen.dart';
 import 'package:myapp/screens/webview_shopping_scree/webview_shopping_screen.dart';
 import 'package:myapp/services/admin_service.dart';
 import 'package:provider/provider.dart';
@@ -234,7 +235,19 @@ class _HomeScreenState extends State<HomeScreen>
     final fabIcons = [Icons.message, Icons.group_add, Icons.qr_code_scanner];
 
     return FloatingActionButton(
-      onPressed: () => context.push(fabRoutes[_currentTabIndex]),
+      // onPressed: () => context.push(fabRoutes[_currentTabIndex]),
+      onPressed: () {
+        if (_currentTabIndex == 0) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SelectUserForChatScreen()),
+          );
+        } else if (_currentTabIndex == 1) {
+          context.push('/groups/create');
+        } else if (_currentTabIndex == 2) {
+          context.push('/scan');
+        }
+      },
       child: Icon(fabIcons[_currentTabIndex]),
     );
   }

@@ -11,6 +11,7 @@ import 'settings_provider.dart';
 
 class ChatProvider with ChangeNotifier {
   final DatabaseReference _dbRef = FirebaseDatabase.instance.ref();
+  String currentUserId = FirebaseAuth.instance.currentUser!.uid;
   final UserProvider _userProvider;
   final SettingsProvider _settingsProvider;
   final AdminService _adminService;
@@ -471,5 +472,54 @@ class ChatProvider with ChangeNotifier {
     await FirebaseDatabase.instance
         .ref('user_chats/$uid/$conversationId')
         .remove();
+  }
+
+  final _db = FirebaseDatabase.instance.ref();
+
+  /// create OR get one-to-one conversation
+  Future<String> createOrGetPrivateConversation(String otherUserId) async {
+    final currentUserId = FirebaseAuth.instance.currentUser!.uid;
+
+    /// ✅ deterministic conversation id
+    final ids = [currentUserId, otherUserId]..sort();
+    final conversationId = "${ids[0]}_${ids[1]}";
+
+    final conversationRef = _db.child("conversation/$conversationId");
+
+    final snapshot = await conversationRef.get();
+
+    // conversation already exists
+    if (snapshot.exists) {
+      print("EXISTING CONVERSATION CREATED: $conversationId");
+      return conversationId;
+    }
+
+    /// 👇 DEBUG PRINT
+    debugPrint("CREATED CONVERSATION ID = $conversationId");
+
+    /// create new conversation
+    await conversationRef.set({
+      "isGroup": false,
+      "members": {currentUserId: true, otherUserId: true},
+      "createdAt": ServerValue.timestamp,
+    });
+
+    return conversationId;
+  }
+
+  // one to one chat screen se related functions can be added here if needed
+  Future<void> sendMessage1({
+    required String conversationId,
+    required String text,
+  }) async {
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+
+    final messageRef = _db.child("messages/$conversationId").push();
+
+    await messageRef.set({
+      "senderId": uid,
+      "text": text,
+      "timestamp": ServerValue.timestamp,
+    });
   }
 }
