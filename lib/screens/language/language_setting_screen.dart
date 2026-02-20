@@ -17,6 +17,18 @@ class LanguageSettingsScreen extends StatelessWidget {
       AppLanguage('Spanish', const Locale('es')),
       AppLanguage('French', const Locale('fr')),
       AppLanguage('Deutsch', const Locale('de')),
+      // new languages
+      AppLanguage('Hindi', const Locale('hi')),
+      AppLanguage('Thai', const Locale('th')),
+      AppLanguage('Vietnamese', const Locale('vi')),
+      AppLanguage('Bengali', const Locale('bn')),
+      AppLanguage('Persian', const Locale('fa')),
+      AppLanguage('Polish', const Locale('pl')),
+      AppLanguage('Persian', const Locale('fa')),
+      AppLanguage('Indonesian', const Locale('id')),
+      AppLanguage('Italian', const Locale('it')),
+      AppLanguage('Korean', const Locale('ko')),
+      AppLanguage('Turkish', const Locale('tr')),
     ];
 
     return Scaffold(
