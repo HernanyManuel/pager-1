@@ -88,26 +88,92 @@ class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
           final isSelected =
               _selectedLocale == lang.locale || context.locale == lang.locale;
 
-          return ListTile(
-            leading: CountryFlag.fromCountryCode(
-              languageFlags[lang.locale.languageCode] ?? 'US',
+          // return ListTile(
+          //   leading: CountryFlag.fromCountryCode(
+          //     languageFlags[lang.locale.languageCode] ?? 'US',
+          //   ),
+
+          //   title: Text(lang.title),
+
+          //   trailing: isSelected
+          //       ? const Icon(Icons.check, color: Colors.green)
+          //       : null,
+
+          //   onTap: () async {
+          //     // change language only
+          //     await context.setLocale(lang.locale);
+
+          //     // update UI selection
+          //     setState(() {
+          //       _selectedLocale = lang.locale;
+          //     });
+          //   },
+          // );
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: ListTile(
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+
+                // 🔴 LEFT RADIO STYLE
+                leading: Container(
+                  width: 26,
+                  height: 26,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: isSelected ? Colors.red : Colors.grey,
+                      width: 2,
+                    ),
+                  ),
+                  child: isSelected
+                      ? Center(
+                          child: Container(
+                            width: 10,
+                            height: 10,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.red,
+                            ),
+                          ),
+                        )
+                      : null,
+                ),
+
+                // 🌍 LANGUAGE NAME
+                title: Text(
+                  lang.title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+
+                // ⬜ RIGHT ROUNDED CHECKBOX
+                trailing: Container(
+                  width: 22,
+                  height: 22,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(color: Colors.grey, width: 2),
+                  ),
+                ),
+
+                onTap: () async {
+                  await context.setLocale(lang.locale);
+                  setState(() {
+                    _selectedLocale = lang.locale;
+                  });
+                },
+              ),
             ),
-
-            title: Text(lang.title),
-
-            trailing: isSelected
-                ? const Icon(Icons.check, color: Colors.green)
-                : null,
-
-            onTap: () async {
-              // change language only
-              await context.setLocale(lang.locale);
-
-              // update UI selection
-              setState(() {
-                _selectedLocale = lang.locale;
-              });
-            },
           );
         },
       ),

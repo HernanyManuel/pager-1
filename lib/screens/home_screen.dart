@@ -3,8 +3,10 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:myapp/screens/one_to_one_chat/one_to_one_chat_screen.dart';
+import 'package:myapp/screens/settings_screen.dart';
 import 'package:myapp/screens/webview_shopping_scree/webview_shopping_screen.dart';
 import 'package:myapp/services/admin_service.dart';
 import 'package:provider/provider.dart';
@@ -182,6 +184,12 @@ class _HomeScreenState extends State<HomeScreen>
           IconButton(
             icon: const Icon(Icons.settings_outlined),
             tooltip: 'Settings',
+            // onPressed: () {
+            //   Navigator.push(
+            //     context,
+            //     MaterialPageRoute(builder: (_) => const SettingsScreen()),
+            //   );
+            // },
             onPressed: () => context.push('/settings'),
           ),
           IconButton(
@@ -497,7 +505,7 @@ class DeviceControlCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const Divider(height: 30),
+              Divider(height: 30.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [

@@ -180,7 +180,7 @@
     "noUplinksRegistered": "No uplinks registered.",
     "deviceWithId": "Device with ID",
     "wasNotFound": "was not found",
-    "sendCommand": "“Command successfully sent to the queue.",
+    "sendCommand": "Command successfully sent to the queue.",
     "errorSendingCommand": "Error sending the command. Check the console for more details.",
     "pleaseEnter": "Please enter a name for the group.",
     "inviteMembers": "Invite Member",
@@ -246,15 +246,13 @@
     "controlYourDevices": "Control your devices from anywhere, at any time.",
     "secureReliable": "Secure & Reliable",
     "secureReliableDescription": "Your data is protected with end-to-end encryption and secure cloud storage.",
-    "privacyPolicy": {
-        "title": "Privacy Policy",
-        "line1": "Your Privacy Policy text here...",
-        "point1": "1. We collect basic account information.",
-        "point2": "2. We do not sell user data.",
-        "point3": "3. Messages are stored securely.",
-        "point4": "4. Users can request account deletion anytime.",
-        "footer": "By using this app, you agree to this Privacy Policy."
-    },
+    "privacyPolicyTitle": "Privacy Policy",
+    "privacyPolicyLine1": "Your Privacy Policy text here...",
+    "privacyPolicyPoint1": "1. We collect basic account information.",
+    "privacyPolicyPoint2": "2. We do not sell user data.",
+    "privacyPolicyPoint3": "3. Messages are stored securely.",
+    "privacyPolicyPoint4": "4. Users can request account deletion anytime.",
+    "privacyPolicyFooter": "By using this app, you agree to this Privacy Policy.",
     "loginError": "Login Error",
     "loginFailed": "Login failed. Please check credentials.",
     "someThingWentRong": "Something went wrong.",
@@ -276,5 +274,6 @@
     "fullName": "Full Name",
     "enterYourName": "Enter your name",
     "register": "Register",
-    "skip": "Skip"
+    "skip": "Skip",
+    "privacyPolicy": "Privacy Policy"
 }

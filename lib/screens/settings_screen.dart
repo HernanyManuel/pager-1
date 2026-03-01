@@ -32,7 +32,11 @@ class SettingsScreen extends StatelessWidget {
       screenClass: 'SettingsScreen',
     );
     return Scaffold(
-      appBar: AppBar(title: Text('settings'.tr())),
+      appBar: AppBar(
+        title: Text('settings'.tr()),
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+      ),
       body: Consumer<SettingsProvider>(
         builder: (context, settingsProvider, child) {
           if (settingsProvider.isLoading) {
@@ -72,9 +76,7 @@ class SettingsScreen extends StatelessWidget {
           title: Text('readReceits'.tr()),
           subtitle: Text('disable'.tr()),
           value: settingsProvider.readReceiptsEnabled,
-          // onChanged: (bool value) {
-          //   settingsProvider.toggleReadReceipts(value);
-          // },
+
           onChanged: (bool value) {
             settingsProvider.toggleReadReceipts(value);
             _analytics.logEvent(

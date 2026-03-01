@@ -2,8 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:myapp/screens/language/language_setting_screen.dart';
-import 'package:myapp/screens/splash/splash_screen.dart';
-// Importar os novos ecrãs de admin
 import '../screens/admin/admin_dashboard_screen.dart';
 import '../screens/admin/admin_user_management_screen.dart';
 import '../screens/admin/admin_device_management_screen.dart';
@@ -15,13 +13,12 @@ import '../screens/admin/admin_uplink_feed_screen.dart';
 import '../screens/admin/admin_group_management_screen.dart';
 import '../screens/admin/admin_create_group_screen.dart';
 import '../screens/admin/admin_group_detail_screen.dart';
-// Outros imports
 import '../screens/device_screen.dart';
 import '../screens/chat/conversation_list_screen.dart';
 import '../screens/chat/chat_screen.dart';
 import '../screens/groups/create_group_screen.dart';
 import '../screens/group/group_details_screen.dart';
-import '../screens/group/add_members_screen.dart'; // ROTA NOVA
+import '../screens/group/add_members_screen.dart';
 import '../screens/groups/group_list_screen.dart';
 import '../screens/home_screen.dart';
 import '../screens/legal/legal_acceptance_screen.dart';
@@ -231,63 +228,43 @@ class AppRouter {
       ),
     ],
 
-    // redirect: (context, state) {
-    //   final bool loggedIn = authService.currentUser != null;
-    //   final bool isLoggingIn =
-    //       state.matchedLocation == '/login' ||
-    //       state.matchedLocation == '/register';
-
-    //   // stay on splash for 2 seconds
-    //   if (state.matchedLocation == '/splash') {
-    //     return null;
-    //   }
-
-    //   // language
-    //   if (!hasSelectedLanguage) {
-    //     return '/language';
-    //   }
-
-    //   // onboarding
-    //   if (!hasSeenOnboarding) {
-    //     return '/onboarding';
-    //   }
-
-    //   // auth
-    //   if (loggedIn && isLoggingIn) {
-    //     return '/';
-    //   }
-
-    //   if (!loggedIn && !isLoggingIn) {
-    //     return '/login';
-    //   }
-
-    //   return null;
-    // },
     redirect: (context, state) {
       final bool loggedIn = authService.currentUser != null;
-      final bool isLoggingIn =
-          state.matchedLocation == '/login' ||
-          state.matchedLocation == '/register';
+      final String location = state.matchedLocation;
 
-      // LANGUAGE CHECK
-      if (!hasSelectedLanguage && state.matchedLocation != '/language') {
-        return '/language';
+      // ✅ If user already logged in → always go Home
+      if (loggedIn) {
+        if (location == '/login' ||
+            location == '/register' ||
+            location == '/language' ||
+            location == '/onboarding' ||
+            location == '/splash') {
+          return '/';
+        }
+        return null;
       }
 
-      // ONBOARDING CHECK
-      if (hasSelectedLanguage &&
-          !hasSeenOnboarding &&
-          state.matchedLocation != '/onboarding') {
-        return '/onboarding';
+      // 🟢 If NOT logged in
+
+      // 1️⃣ First time → language
+      if (!hasSelectedLanguage) {
+        if (location != '/language') {
+          return '/language';
+        }
+        return null;
       }
 
-      // AUTH CHECK
-      if (!loggedIn && !isLoggingIn) {
+      // 2️⃣ After language → onboarding
+      if (!hasSeenOnboarding) {
+        if (location != '/onboarding') {
+          return '/onboarding';
+        }
+        return null;
+      }
+
+      // 3️⃣ After onboarding → login
+      if (location != '/login' && location != '/register') {
         return '/login';
-      }
-
-      if (loggedIn && isLoggingIn) {
-        return '/';
       }
 
       return null;
