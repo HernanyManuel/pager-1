@@ -56,6 +56,9 @@ dependencies:
   webview_flutter: ^4.13.1
   flutter_launcher_icons: ^0.14.4
   country_flags: ^4.1.2
+  flame: ^1.35.1
+  flame_audio: ^2.11.14
+  flame_tiled: ^3.0.11
 
   
 

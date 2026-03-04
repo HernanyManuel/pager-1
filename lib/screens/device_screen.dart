@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../services/lora_service.dart';
 
 class DeviceScreen extends StatefulWidget {
-  final String id; // “Device ID (clean MAC)
+  final String id;
 
   const DeviceScreen({super.key, required this.id});
 

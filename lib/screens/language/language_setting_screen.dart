@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:myapp/models/language_model.dart';
+import 'package:myapp/providers/theme_provider.dart';
 import 'package:myapp/screens/onboarding/onboarding_screen.dart';
-import 'package:country_flags/country_flags.dart';
+import 'package:provider/provider.dart';
 
 class LanguageSettingsScreen extends StatefulWidget {
   const LanguageSettingsScreen({super.key});
@@ -79,65 +81,40 @@ class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
           ),
         ],
       ),
-
       body: ListView.builder(
         itemCount: languages.length,
         itemBuilder: (context, index) {
           final lang = languages[index];
-
           final isSelected =
               _selectedLocale == lang.locale || context.locale == lang.locale;
-
-          // return ListTile(
-          //   leading: CountryFlag.fromCountryCode(
-          //     languageFlags[lang.locale.languageCode] ?? 'US',
-          //   ),
-
-          //   title: Text(lang.title),
-
-          //   trailing: isSelected
-          //       ? const Icon(Icons.check, color: Colors.green)
-          //       : null,
-
-          //   onTap: () async {
-          //     // change language only
-          //     await context.setLocale(lang.locale);
-
-          //     // update UI selection
-          //     setState(() {
-          //       _selectedLocale = lang.locale;
-          //     });
-          //   },
-          // );
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.grey.shade200,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12.r),
               ),
               child: ListTile(
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: 16.w,
+                  vertical: 8.h,
                 ),
-
                 // 🔴 LEFT RADIO STYLE
                 leading: Container(
-                  width: 26,
-                  height: 26,
+                  width: 26.w,
+                  height: 26.h,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
                       color: isSelected ? Colors.red : Colors.grey,
-                      width: 2,
+                      width: 2.w,
                     ),
                   ),
                   child: isSelected
                       ? Center(
                           child: Container(
-                            width: 10,
-                            height: 10,
+                            width: 10.w,
+                            height: 10.h,
                             decoration: const BoxDecoration(
                               shape: BoxShape.circle,
                               color: Colors.red,
@@ -146,26 +123,30 @@ class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
                         )
                       : null,
                 ),
-
                 // 🌍 LANGUAGE NAME
-                title: Text(
-                  lang.title,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
+                title: Consumer(
+                  builder: (context, value, child) {
+                    return Text(
+                      lang.title,
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        color: context.watch<ThemeProvider>().isDark
+                            ? Colors.white
+                            : Colors.black87,
+                      ),
+                    );
+                  },
                 ),
-
                 // ⬜ RIGHT ROUNDED CHECKBOX
                 trailing: Container(
-                  width: 22,
-                  height: 22,
+                  width: 22.w,
+                  height: 22.h,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(color: Colors.grey, width: 2),
+                    borderRadius: BorderRadius.circular(6.r),
+                    border: Border.all(color: Colors.grey, width: 2.w),
                   ),
                 ),
-
                 onTap: () async {
                   await context.setLocale(lang.locale);
                   setState(() {

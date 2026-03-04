@@ -2,10 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:myapp/screens/one_to_one_chat/one_to_one_chat_screen.dart';
+import 'package:myapp/providers/theme_provider.dart';
+import 'package:myapp/screens/game/my_game.dart';
+import 'package:myapp/screens/one_to_one_chat/select_user_for_chat_screen.dart';
 import 'package:myapp/screens/settings_screen.dart';
 import 'package:myapp/screens/webview_shopping_scree/webview_shopping_screen.dart';
 import 'package:myapp/services/admin_service.dart';
@@ -181,16 +184,17 @@ class _HomeScreenState extends State<HomeScreen>
             tooltip: 'Search',
             onPressed: _toggleSearch,
           ),
+
           IconButton(
             icon: const Icon(Icons.settings_outlined),
             tooltip: 'Settings',
-            // onPressed: () {
-            //   Navigator.push(
-            //     context,
-            //     MaterialPageRoute(builder: (_) => const SettingsScreen()),
-            //   );
-            // },
-            onPressed: () => context.push('/settings'),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SettingsScreen()),
+              );
+            },
+            // onPressed: () => context.push('/settings'),
           ),
           IconButton(
             icon: const Icon(Icons.shopping_cart_outlined),
@@ -311,7 +315,12 @@ class EmptyState extends StatelessWidget {
             Text(
               'welcome'.tr(),
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 18, color: Colors.black87),
+              style: TextStyle(
+                fontSize: 18.sp,
+                color: context.watch<ThemeProvider>().isDark
+                    ? Colors.white
+                    : Colors.black87,
+              ),
             ),
             const SizedBox(height: 30),
             ElevatedButton.icon(

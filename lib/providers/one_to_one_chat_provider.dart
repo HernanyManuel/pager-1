@@ -7,8 +7,9 @@ class OneToOneChatProvider extends ChangeNotifier {
   String currentUserId = FirebaseAuth.instance.currentUser!.uid;
 
   bool isLoading = true;
-  List<Map> conversations = [];
+  // List<Map> conversations = [];
 
+  List<Map<String, dynamic>> conversations = [];
   OneToOneChatProvider() {
     _listenConversations();
   }
@@ -31,14 +32,30 @@ class OneToOneChatProvider extends ChangeNotifier {
             conv['id'] = e.key;
             return conv;
           })
-          .where((conv) => (conv['members'] as Map).containsKey(currentUserId))
+          // .where((conv) => (conv['members'] as Map).containsKey(currentUserId))
+          .where((conv) {
+            final members = Map<String, dynamic>.from(conv['members'] ?? {});
+            return members.containsKey(currentUserId);
+          })
           .toList();
 
-      convList.sort(
-        (a, b) => (b['lastMessageTimestamp'] ?? 0).compareTo(
-          a['lastMessageTimestamp'] ?? 0,
-        ),
-      );
+      // convList.sort(
+      //   (a, b) => (b['lastMessageTimestamp'] ?? 0).compareTo(
+      //     a['lastMessageTimestamp'] ?? 0,
+      //   ),
+      // );
+      convList.sort((a, b) {
+        int getTimestamp(dynamic value) {
+          if (value is int) return value;
+          if (value is String) return int.tryParse(value) ?? 0;
+          return 0; // null or ServerValue map
+        }
+
+        final t1 = getTimestamp(b['lastMessageTimestamp']);
+        final t2 = getTimestamp(a['lastMessageTimestamp']);
+
+        return t1.compareTo(t2);
+      });
 
       conversations = convList;
       isLoading = false;
@@ -46,31 +63,44 @@ class OneToOneChatProvider extends ChangeNotifier {
     });
   }
 
-  /// Send a message and update conversation info
   Future<void> sendMessage({
     required String conversationId,
     required String text,
     required String otherUserId,
   }) async {
-    if (text.trim().isEmpty) return;
+    final message = text.trim();
+    if (message.isEmpty) return;
 
-    final messageRef = db.child('messages/$conversationId').push();
-    final timestamp = ServerValue.timestamp;
+    try {
+      /// Firebase server timestamp
+      final timestamp = ServerValue.timestamp;
 
-    // send message to messages node
-    await messageRef.set({
-      "senderId": currentUserId,
-      "text": text,
-      "timestamp": timestamp,
-    });
+      /// 1️⃣ Create message reference
+      final messageRef = db.child('messages').child(conversationId).push();
 
-    // update conversation node with last message
-    await db.child('conversation/$conversationId').update({
-      "lastMessage": text,
-      "lastMessageSenderId": currentUserId,
-      "lastMessageTimestamp": timestamp,
-      "members": {currentUserId: true, otherUserId: true},
-    });
+      /// 2️⃣ Save message
+      await messageRef.set({
+        "id": messageRef.key, // helpful later (delete/reply)
+        "senderId": currentUserId,
+        "text": message,
+        "type": "text", // future support (image, audio etc)
+        "timestamp": timestamp,
+      });
+
+      /// 3️⃣ Update conversation (WhatsApp style)
+      await db.child('conversation').child(conversationId).update({
+        "conversationId": conversationId,
+        "lastMessage": message,
+        "lastMessageSenderId": currentUserId,
+        "lastMessageType": "text",
+        "lastMessageTimestamp": timestamp,
+
+        /// members required for conversation list filtering
+        "members": {currentUserId: true, otherUserId: true},
+      });
+    } catch (e) {
+      debugPrint("Send message error: $e");
+    }
   }
 
   /// Create or get a deterministic conversation ID for one-to-one chat
